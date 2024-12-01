@@ -15,6 +15,7 @@ inav-configurator.iml
 *~
 *.swp
 *.bak
+*.vsidx
 eeprom.bin
 yarn.lock
 /.vs/MIGRATED_PROJECT/FileContentIndex/4516c831-32af-46bc-b0cb-78a57094a845.vsidx

@@ -1,0 +1,3 @@
+C:\Programs\Projects\inav-configurator-master\obj\Debug\iNav-Skylogix.njsproj.AssemblyReference.cache
+C:\Programs\Projects\inav-configurator-master\obj\Debug\iNav-Skylogix.njsproj.CoreCompileInputs.cache
+C:\Programs\Projects\inav-configurator-master\bin\Microsoft.NodejsTools.WebRole.dll
