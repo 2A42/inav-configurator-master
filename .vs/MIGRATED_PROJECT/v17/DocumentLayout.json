@@ -17,14 +17,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{B0FA5FF5-B0BD-49D2-A2C8-5B7096879BA9}|MIGRATED_PROJECT.esproj|c:\\programs\\projects\\inav-configurator-master\\js\\waypoint.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
       "RelativeMoniker": "D:0:0:{B0FA5FF5-B0BD-49D2-A2C8-5B7096879BA9}|MIGRATED_PROJECT.esproj|solutionrelative:js\\waypoint.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B0FA5FF5-B0BD-49D2-A2C8-5B7096879BA9}|MIGRATED_PROJECT.esproj|c:\\programs\\projects\\inav-configurator-master\\js\\helpers.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{B0FA5FF5-B0BD-49D2-A2C8-5B7096879BA9}|MIGRATED_PROJECT.esproj|solutionrelative:js\\helpers.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B0FA5FF5-B0BD-49D2-A2C8-5B7096879BA9}|MIGRATED_PROJECT.esproj|c:\\programs\\projects\\inav-configurator-master\\js\\configurator_main.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{B0FA5FF5-B0BD-49D2-A2C8-5B7096879BA9}|MIGRATED_PROJECT.esproj|solutionrelative:js\\configurator_main.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,9 +34,9 @@
               "Title": "mission_control.js",
               "DocumentMoniker": "C:\\Programs\\Projects\\inav-configurator-master\\tabs\\mission_control.js",
               "RelativeDocumentMoniker": "tabs\\mission_control.js",
-              "ToolTip": "C:\\Programs\\Projects\\inav-configurator-master\\tabs\\mission_control.js",
-              "RelativeToolTip": "tabs\\mission_control.js",
-              "ViewState": "AQIAAIgJAAAAAAAAAAAQwJMJAAAjAAAA",
+              "ToolTip": "C:\\Programs\\Projects\\inav-configurator-master\\tabs\\mission_control.js*",
+              "RelativeToolTip": "tabs\\mission_control.js*",
+              "ViewState": "AQIAAGQKAAAAAAAAAAAqwHgKAAAmAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
               "WhenOpened": "2024-11-25T16:24:13.964Z",
               "IsPinned": true,
@@ -52,7 +44,15 @@
             },
             {
               "$type": "Bookmark",
+              "Name": "ST:129:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Bookmark",
               "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             },
             {
               "$type": "Document",
@@ -64,19 +64,8 @@
               "RelativeToolTip": "js\\markerManager.js",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAC8AAAAmAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-11-30T15:22:29.48Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "helpers.js",
-              "DocumentMoniker": "C:\\Programs\\Projects\\inav-configurator-master\\js\\helpers.js",
-              "RelativeDocumentMoniker": "js\\helpers.js",
-              "ToolTip": "C:\\Programs\\Projects\\inav-configurator-master\\js\\helpers.js",
-              "RelativeToolTip": "js\\helpers.js",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAADgAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-11-26T15:54:24.589Z"
+              "WhenOpened": "2024-11-30T15:22:29.48Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -101,18 +90,6 @@
               "ViewState": "AQIAAAcAAAAAAAAAAAAAAEEAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
               "WhenOpened": "2024-11-26T16:20:04.776Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "configurator_main.js",
-              "DocumentMoniker": "C:\\Programs\\Projects\\inav-configurator-master\\js\\configurator_main.js",
-              "RelativeDocumentMoniker": "js\\configurator_main.js",
-              "ToolTip": "C:\\Programs\\Projects\\inav-configurator-master\\js\\configurator_main.js",
-              "RelativeToolTip": "js\\configurator_main.js",
-              "ViewState": "AQIAAK8AAAAAAAAAAAAYwL0AAABAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-11-26T17:11:15.823Z"
             }
           ]
         }

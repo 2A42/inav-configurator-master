@@ -398,6 +398,7 @@ TABS.mission_control.initialize = function (callback) {
 
     // marker manager extension
     var paintMarkers = [];     // Layer for "paint mode" marker
+    var isDrawingMode = true;
     const markerVectorSource = new ol.source.Vector();
     const markerVectorLayer = new ol.layer.Vector({
         source: markerVectorSource,
@@ -2466,10 +2467,6 @@ TABS.mission_control.initialize = function (callback) {
         // Map on-click behavior definition
         //////////////////////////////////////////////////////////////////////////
         map.on('click', function (evt) {
-            // TEMP
-            var _TEMP_IsDrawingMode = true;
-
-
             var tempSelectedMarkerIndex = null;
             if (selectedMarker != null && selectedFeature != null) {
                 tempSelectedMarkerIndex = selectedMarker.getLayerNumber();
@@ -2644,7 +2641,7 @@ TABS.mission_control.initialize = function (callback) {
                 renderGeozonesOnMap();
                 updateGeozoneInfo();
             }
-            else if (!disableMarkerEdit && !_TEMP_IsDrawingMode) {
+            else if (!disableMarkerEdit && !isDrawingMode) {
 
                 // MARKER ADD EVENT
                 GUI.log('MARKER ADDED');
@@ -2677,29 +2674,7 @@ TABS.mission_control.initialize = function (callback) {
             }
 
             else if (!disableMarkerEdit) {
-
-                // CIRCLE
-                GUI.log('CIRCLE ADDED');
                 const coord = evt.coordinate; // Получаем координаты клика
-
-                //// Создаем круг с радиусом 100
-                //const circle = new ol.Feature({
-                //    geometry: new ol.geom.Circle(coord, 10000), // Радиус можно настроить
-                //});
-
-                //// Настраиваем индивидуальный стиль для круга
-                //circle.setStyle(
-                //    new ol.style.Style({
-                //        fill: new ol.style.Fill({
-                //            color: 'rgba(255, 0, 0, 0.5)', // Прозрачная красная заливка
-                //        }),
-                //        stroke: new ol.style.Stroke({
-                //            color: 'red', // Красная граница
-                //            width: 3,     // Толщина границы
-                //        }),
-                //    })
-                //);
-
                 const Marker = markerManager.createTextMarker(coord, 'Твой маркер', 'Бу бу', 'red', 26);
 
                 paintMarkers.push(Marker);
