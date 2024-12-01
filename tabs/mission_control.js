@@ -399,8 +399,8 @@ TABS.mission_control.initialize = function (callback) {
     // marker manager extension
     var paintMarkers = [];     // Layer for "paint mode" marker
     var isDrawingMode = true;
-    const markerVectorSource = new ol.source.Vector();
-    const markerVectorLayer = new ol.layer.Vector({
+    var markerVectorSource = new ol.source.Vector();
+    var markerVectorLayer = new ol.layer.Vector({
         source: markerVectorSource,
     });
     const markerManager = new MarkerManager(markerVectorSource);
@@ -1397,11 +1397,22 @@ TABS.mission_control.initialize = function (callback) {
     /////////////////////////////////////////////
 
     function removeAllWaypoints() {
-        mission.reinit();
-        refreshLayers();
-        clearEditForm();
-        updateTotalInfo();
-        clearFilename();
+        if (isDrawingMode)
+        {
+            map.removeLayer(markerVectorLayer);
+            markerVectorSource = new ol.source.Vector();
+            markerVectorLayer = new ol.layer.Vector({
+                source: markerVectorSource,
+            });
+            map.addLayer(markerVectorLayer);
+        }
+        else {
+            mission.reinit();
+            refreshLayers();
+            clearEditForm();
+            updateTotalInfo();
+            clearFilename();
+        }
     }
 
     function addWaypointMarker(waypoint, isEdit=false) {
@@ -2074,18 +2085,18 @@ TABS.mission_control.initialize = function (callback) {
          * @extends {ol.control.Control}
          * @param {Object=} opt_options Control options.
          */
-        app.GeozonesControl = function(opt_options)  {
+        app.GeozonesControl = function (opt_options) {
             var options = opt_options || {};
             var button = document.createElement('button');
 
             button.innerHTML = ' ';
             button.style = 'background: url(\'./images/icons/cf_icon_geozone_white.svg\') no-repeat 1px -1px;background-color: rgba(0,60,136,.5);';
-            
+
             var handleShowGeozoneSettings = function () {
                 $('#missionPlannerGeozones').fadeIn(300);
                 if (!selectedGeozone) {
                     selectedGeozone = FC.GEOZONES.first();
-                } 
+                }
                 renderGeozoneOptions();
                 renderGeozonesOnMap();
             };
@@ -2143,10 +2154,10 @@ TABS.mission_control.initialize = function (callback) {
         ol.inherits(app.PlannerElevationControl, ol.control.Control);
 
         // /**
-         // * @constructor
-         // * @extends {ol.control.Control}
-         // * @param {Object=} opt_options Control options.
-         // */
+        // * @constructor
+        // * @extends {ol.control.Control}
+        // * @param {Object=} opt_options Control options.
+        // */
         app.PlannerMultiMissionControl = function (opt_options) {
 
             var options = opt_options || {};
@@ -2206,7 +2217,7 @@ TABS.mission_control.initialize = function (callback) {
          * @param {ol.MapBrowserEvent} evt Map browser event.
          */
         app.Drag.prototype.handleDragEvent = function (evt) {
-            
+
             if (tempMarker.kind == "safehomecircle" || tempMarker.kind == "geozonecircle") {
                 return;
             }
@@ -2330,10 +2341,10 @@ TABS.mission_control.initialize = function (callback) {
                     })()
                 }
             }
-            else if (tempMarker.kind == "home" ) {
+            else if (tempMarker.kind == "home") {
                 (async () => {
                     const elevationAtHome = await HOME.getElevation(globalSettings);
-                    $('#elevationValueAtHome').text(elevationAtHome+' m');
+                    $('#elevationValueAtHome').text(elevationAtHome + ' m');
                     HOME.setAlt(elevationAtHome);
                     plotElevation();
                 })()
@@ -2371,10 +2382,10 @@ TABS.mission_control.initialize = function (callback) {
                 imagerySet: 'AerialWithLabels',
                 maxZoom: 19
             });
-        } else if ( globalSettings.mapProviderType == 'mapproxy' ) {
+        } else if (globalSettings.mapProviderType == 'mapproxy') {
             mapLayer = new ol.source.TileWMS({
                 url: globalSettings.proxyURL,
-                params: {'LAYERS':globalSettings.proxyLayer}
+                params: { 'LAYERS': globalSettings.proxyLayer }
             })
         } else {
             mapLayer = new ol.source.OSM();
@@ -2429,7 +2440,7 @@ TABS.mission_control.initialize = function (callback) {
         // Set the attribute link to open on an external browser window, so
         // it doesn't interfere with the configurator.
         //////////////////////////////////////////////////////////////////////////
-        setTimeout(function() {
+        setTimeout(function () {
             $('.ol-attribution a').attr('target', '_blank');
         }, 100);
         //////////////////////////////////////////////////////////////////////////
@@ -2450,24 +2461,29 @@ TABS.mission_control.initialize = function (callback) {
             map.getView().setZoom(missionPlannerLastValues.zoom);
         }
 
-        // Map on right-click event
+        // Map on click event for drawing Mode
         map.on('pointerdown', function (evt) {
-            if (evt.originalEvent.button === 2) { // Проверяем, что нажата ПКМ
-                // CIRCLE
-                GUI.log('VERTEX ADDED');
+            if (isDrawingMode) {
                 const coord = evt.coordinate; // Получаем координаты клика
-                const Marker = markerManager.createTextMarker(coord, 'Мой маркер', 'Описание маркера', 'blue', 16);
+                let Marker;
+                if (evt.originalEvent.button === 2) { // Проверяем, что нажата ПКМ
 
+                    Marker = markerManager.createTextMarker(coord, 'Мой маркер', 'Описание маркера', 'blue', 16);
+                }
+                else {
+                    Marker = markerManager.createTextMarker(coord, 'Твой маркер', 'Бу бу', 'red', 26);
+                }
                 paintMarkers.push(Marker);
                 refreshPaintMarkers();
             }
         });
 
         //////////////////////////////////////////////////////////////////////////
-        // Map on-click behavior definition
+        // Map on-click behavior definition for waypoint Mode
         //////////////////////////////////////////////////////////////////////////
         map.on('click', function (evt) {
             var tempSelectedMarkerIndex = null;
+            if (isDrawingMode) return;
             if (selectedMarker != null && selectedFeature != null) {
                 tempSelectedMarkerIndex = selectedMarker.getLayerNumber();
                 try {
@@ -2641,10 +2657,9 @@ TABS.mission_control.initialize = function (callback) {
                 renderGeozonesOnMap();
                 updateGeozoneInfo();
             }
-            else if (!disableMarkerEdit && !isDrawingMode) {
 
-                // MARKER ADD EVENT
-                GUI.log('MARKER ADDED');
+            // Waypoint add
+            else if (!disableMarkerEdit) {
                 let tempWpCoord = ol.proj.toLonLat(evt.coordinate);
                 let tempWp = new Waypoint(mission.get().length, MWNP.WPTYPE.WAYPOINT, Math.round(tempWpCoord[1] * 10000000), Math.round(tempWpCoord[0] * 10000000), Number(settings.alt), Number(settings.speed));
 
@@ -2671,14 +2686,6 @@ TABS.mission_control.initialize = function (callback) {
                     refreshLayers();
                     plotElevation();
                 }
-            }
-
-            else if (!disableMarkerEdit) {
-                const coord = evt.coordinate; // Получаем координаты клика
-                const Marker = markerManager.createTextMarker(coord, 'Твой маркер', 'Бу бу', 'red', 26);
-
-                paintMarkers.push(Marker);
-                refreshPaintMarkers();
             }
             //mission.missionDisplayDebug();
             updateMultimissionState();
@@ -3674,7 +3681,7 @@ TABS.mission_control.initialize = function (callback) {
         // Callback for Remove buttons
         /////////////////////////////////////////////
         $('#removeAllPoints').on('click', function () {
-            if (markers.length && confirm(i18n.getMessage('confirm_delete_all_points'))) {
+            if ((isDrawingMode || markers.length) && confirm(i18n.getMessage('confirm_delete_all_points'))) {
                 if (removeAllMultiMissionCheck()) {
                     removeAllWaypoints();
                     updateMultimissionState();
@@ -3723,6 +3730,23 @@ TABS.mission_control.initialize = function (callback) {
                 }
                 updateMultimissionState();
             }
+        });
+
+        /////////////////////////////////////////////
+        // Callback for drawing Mode
+        /////////////////////////////////////////////
+        $('#toggleDrawingModeButton').on('click', function () {
+            // drawing button
+            isDrawingMode = !isDrawingMode;
+
+            if (isDrawingMode) {
+                $(this).attr('style', 'background-color: #ff6666;');
+            }
+            else {
+                $(this).attr('style', 'background-color: #66ff66;');
+            }
+
+            GUI.log(`Drawing Mode is now: ${isDrawingMode}`);
         });
 
         /////////////////////////////////////////////
