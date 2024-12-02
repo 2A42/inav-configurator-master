@@ -399,6 +399,7 @@ TABS.mission_control.initialize = function (callback) {
     // marker manager extension
     var paintMarkers = [];     // Layer for "paint mode" marker
     var isDrawingMode = true;
+    var isDrawingLineNow = false;
     var markerVectorSource = new ol.source.Vector();
     var markerVectorLayer = new ol.layer.Vector({
         source: markerVectorSource,
@@ -2446,6 +2447,7 @@ TABS.mission_control.initialize = function (callback) {
         //////////////////////////////////////////////////////////////////////////
         // save map view settings when user moves it
         //////////////////////////////////////////////////////////////////////////
+
         map.on('moveend', function (evt) {
             store.set('missionPlannerLastValues', {
                 center: ol.proj.toLonLat(map.getView().getCenter()),
@@ -2461,22 +2463,48 @@ TABS.mission_control.initialize = function (callback) {
             map.getView().setZoom(missionPlannerLastValues.zoom);
         }
 
+        //////////////////////////////////////////////////////////////////////////
+        // Drawing
+        //////////////////////////////////////////////////////////////////////////
         // Map on click event for drawing Mode
-        map.on('pointerdown', function (evt) {
-            if (isDrawingMode) {
-                const coord = evt.coordinate; // Получаем координаты клика
-                let Marker;
-                if (evt.originalEvent.button === 2) { // Проверяем, что нажата ПКМ
 
-                    Marker = markerManager.createTextMarker(coord, 'Мой маркер', 'Описание маркера', 'blue', 16);
-                }
-                else {
-                    Marker = markerManager.createTextMarker(coord, 'Твой маркер', 'Бу бу', 'red', 26);
-                }
-                paintMarkers.push(Marker);
-                refreshPaintMarkers();
-            }
+        // TODO: refactor this and class!~!~!
+        map.on('pointermove', function (evt) {
+            if (!isDrawingMode || !isDrawingLineNow) return; // Только в режиме рисования
+            markerManager.continueDrawingLine(evt.coordinate); // Здесь добавляем evt
+            GUI.log('LINE MOVE');
+            refreshPaintMarkers();
         });
+
+        map.on('pointerdown', function (evt) {
+            if (!isDrawingMode) return;
+
+            let Marker;
+            const coord = evt.coordinate;
+            evt.preventDefault(); // отключаем стандартное поведение карты
+            if (evt.originalEvent.button === 2) { // Проверка на правую кнопку мыши (RMB)
+                GUI.log('LINE START');
+                isDrawingLineNow = true;
+                Marker = markerManager.startDrawingLine(evt.coordinate, {
+                    color: 'green',
+                    width: 4,
+                    lineDash: [5, 5], // Другая пунктирная линия
+                });
+            } else {
+                Marker = markerManager.createTextMarker(coord, 'Мой маркер', 'Описание маркера', 'blue', 16);
+            }
+            paintMarkers.push(Marker);
+            refreshPaintMarkers();
+        });
+
+        map.on('pointerup', function (evt) {
+            if (!isDrawingMode) return; // Только в режиме рисования
+            isDrawingLineNow = false;
+            GUI.log('LINE STOP');
+            markerManager.stopDrawingLine();
+            refreshPaintMarkers();
+        });
+
 
         //////////////////////////////////////////////////////////////////////////
         // Map on-click behavior definition for waypoint Mode
@@ -3745,6 +3773,7 @@ TABS.mission_control.initialize = function (callback) {
             else {
                 $(this).attr('style', 'background-color: #66ff66;');
             }
+            map.getViewport().style.cursor = isDrawingMode ? 'crosshair' : 'default';
 
             GUI.log(`Drawing Mode is now: ${isDrawingMode}`);
         });

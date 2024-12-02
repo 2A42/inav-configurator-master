@@ -3,6 +3,10 @@ const ol = require('openlayers');
 class MarkerManager {
     constructor(vectorSource) {
         this.vectorSource = vectorSource; // Векторный источник для всех маркеров
+
+        this.isDrawing = false; // Флаг для отслеживания состояния рисования
+        this.currentLine = null; // Хранение текущей линии
+        this.lineStyle = null;
     }
 
     /**
@@ -66,6 +70,54 @@ class MarkerManager {
 
         //this.vectorSource.addFeature(marker);
         return marker;
+    }
+
+    setLineStyle(styleConfig) {
+        this.lineStyle = new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: styleConfig.color || 'blue',
+                width: styleConfig.width || 2,
+                lineDash: styleConfig.lineDash || null,
+            }),
+        });
+    }
+    
+    /**
+     * Начать рисование линии
+     * @param {Array<number>} startCoordinate - начальная координата линии
+     * @returns {ol.Feature} - созданный объект линии
+     */
+    startDrawingLine(startCoordinate, styleConfig) {
+        this.isDrawing = true;
+        this.currentLine = new ol.Feature({
+            geometry: new ol.geom.LineString([startCoordinate]),
+        });
+
+        this.setLineStyle(styleConfig);
+        // Применение стиля к линии
+        this.currentLine.setStyle(this.lineStyle);
+        
+
+        return this.currentLine;
+    }
+
+    /**
+     * Продолжить рисование линии
+     * @param {Array<number>} coordinate - текущая координата для добавления
+     */
+    continueDrawingLine(coordinate) {
+        if (!this.isDrawing || !this.currentLine) return;
+
+        const geometry = this.currentLine.getGeometry();
+        geometry.appendCoordinate(coordinate);
+    }
+
+    /**
+     * Завершить рисование линии
+     */
+    stopDrawingLine() {
+        this.isDrawing = false;
+        this.currentLine = null;
     }
 
     /**
