@@ -94,10 +94,7 @@ class MarkerManager {
         });
 
         this.setLineStyle(styleConfig);
-        // Применение стиля к линии
         this.currentLine.setStyle(this.lineStyle);
-        
-
         return this.currentLine;
     }
 

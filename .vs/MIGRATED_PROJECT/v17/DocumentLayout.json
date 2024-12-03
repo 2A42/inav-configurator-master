@@ -7,12 +7,12 @@
       "RelativeMoniker": "D:0:0:{B0FA5FF5-B0BD-49D2-A2C8-5B7096879BA9}|MIGRATED_PROJECT.esproj|solutionrelative:tabs\\mission_control.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B0FA5FF5-B0BD-49D2-A2C8-5B7096879BA9}|MIGRATED_PROJECT.esproj|c:\\programs\\projects\\inav-configurator-master\\js\\helpers.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{B0FA5FF5-B0BD-49D2-A2C8-5B7096879BA9}|MIGRATED_PROJECT.esproj|solutionrelative:js\\helpers.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{B0FA5FF5-B0BD-49D2-A2C8-5B7096879BA9}|MIGRATED_PROJECT.esproj|c:\\programs\\projects\\inav-configurator-master\\js\\markermanager.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
       "RelativeMoniker": "D:0:0:{B0FA5FF5-B0BD-49D2-A2C8-5B7096879BA9}|MIGRATED_PROJECT.esproj|solutionrelative:js\\markermanager.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B0FA5FF5-B0BD-49D2-A2C8-5B7096879BA9}|MIGRATED_PROJECT.esproj|c:\\programs\\projects\\inav-configurator-master\\js\\helpers.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{B0FA5FF5-B0BD-49D2-A2C8-5B7096879BA9}|MIGRATED_PROJECT.esproj|solutionrelative:js\\helpers.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B0FA5FF5-B0BD-49D2-A2C8-5B7096879BA9}|MIGRATED_PROJECT.esproj|c:\\programs\\projects\\inav-configurator-master\\tabs\\mission_control.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -42,9 +42,9 @@
               "Title": "mission_control.js",
               "DocumentMoniker": "C:\\Programs\\Projects\\inav-configurator-master\\tabs\\mission_control.js",
               "RelativeDocumentMoniker": "tabs\\mission_control.js",
-              "ToolTip": "C:\\Programs\\Projects\\inav-configurator-master\\tabs\\mission_control.js",
-              "RelativeToolTip": "tabs\\mission_control.js",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAoAAAA",
+              "ToolTip": "C:\\Programs\\Projects\\inav-configurator-master\\tabs\\mission_control.js*",
+              "RelativeToolTip": "tabs\\mission_control.js*",
+              "ViewState": "AQIAAKEJAAAAAAAAAAAiwKoJAAAkAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
               "WhenOpened": "2024-11-25T16:24:13.964Z",
               "IsPinned": true,
@@ -64,20 +64,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "markerManager.js",
               "DocumentMoniker": "C:\\Programs\\Projects\\inav-configurator-master\\js\\markerManager.js",
               "RelativeDocumentMoniker": "js\\markerManager.js",
               "ToolTip": "C:\\Programs\\Projects\\inav-configurator-master\\js\\markerManager.js",
               "RelativeToolTip": "js\\markerManager.js",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAA6AAAA",
+              "ViewState": "AQIAAGAAAAAAAAAAAAAAAGwAAAA5AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
               "WhenOpened": "2024-11-30T15:22:29.48Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "helpers.js",
               "DocumentMoniker": "C:\\Programs\\Projects\\inav-configurator-master\\js\\helpers.js",
               "RelativeDocumentMoniker": "js\\helpers.js",
@@ -85,8 +85,7 @@
               "RelativeToolTip": "js\\helpers.js",
               "ViewState": "AQIAACIAAAAAAAAAAAAnwDgAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2024-12-01T10:40:06.253Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-01T10:40:06.253Z"
             },
             {
               "$type": "Document",

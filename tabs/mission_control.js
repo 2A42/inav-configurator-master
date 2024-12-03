@@ -2468,12 +2468,10 @@ TABS.mission_control.initialize = function (callback) {
         //////////////////////////////////////////////////////////////////////////
         // Map on click event for drawing Mode
 
-        // TODO: refactor this and class!~!~!
         map.on('pointermove', function (evt) {
             if (!isDrawingMode || !isDrawingLineNow) return; // Только в режиме рисования
             markerManager.continueDrawingLine(evt.coordinate); // Здесь добавляем evt
-            GUI.log('LINE MOVE');
-            refreshPaintMarkers();
+            //refreshPaintMarkers();
         });
 
         map.on('pointerdown', function (evt) {
@@ -2483,15 +2481,14 @@ TABS.mission_control.initialize = function (callback) {
             const coord = evt.coordinate;
             evt.preventDefault(); // отключаем стандартное поведение карты
             if (evt.originalEvent.button === 2) { // Проверка на правую кнопку мыши (RMB)
-                GUI.log('LINE START');
                 isDrawingLineNow = true;
                 Marker = markerManager.startDrawingLine(evt.coordinate, {
-                    color: 'green',
-                    width: 4,
-                    lineDash: [5, 5], // Другая пунктирная линия
+                    color: 'black',
+                    width: 2,
+                    //lineDash: [5, 5], // Другая пунктирная линия
                 });
             } else {
-                Marker = markerManager.createTextMarker(coord, 'Мой маркер', 'Описание маркера', 'blue', 16);
+                Marker = markerManager.createTextMarker(coord, '?', 'Описание маркера', 'blue', 16);
             }
             paintMarkers.push(Marker);
             refreshPaintMarkers();
@@ -2500,11 +2497,9 @@ TABS.mission_control.initialize = function (callback) {
         map.on('pointerup', function (evt) {
             if (!isDrawingMode) return; // Только в режиме рисования
             isDrawingLineNow = false;
-            GUI.log('LINE STOP');
             markerManager.stopDrawingLine();
             refreshPaintMarkers();
         });
-
 
         //////////////////////////////////////////////////////////////////////////
         // Map on-click behavior definition for waypoint Mode
