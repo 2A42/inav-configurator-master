@@ -1,4 +1,5 @@
 const ol = require('openlayers');
+const fs = require('fs');
 
 class MarkerManager {
     constructor(vectorSource) {
@@ -7,6 +8,135 @@ class MarkerManager {
         this.isDrawing = false; // Флаг для отслеживания состояния рисования
         this.currentLine = null; // Хранение текущей линии
         this.lineStyle = null;
+        this.markerStyle = null;
+    }
+
+    loadMarkersFile(paintMarkers, filename) {
+        fs.readFile(filename, 'utf8', (err, data) => {
+
+            const parsedData = JSON.parse(data);
+            if (!parsedData.features || !Array.isArray(parsedData.features)) {
+                return;
+            }
+
+            parsedData.features.forEach(feature => {
+                // Пропуск маркеров с существующими ID
+                const existingMarker = paintMarkers.find(marker => marker.getId() === feature.id);
+                if (existingMarker) {
+                    //console.log(`Маркер с ID ${feature.id} уже существует, пропускаем.`);
+                    return;
+                }
+
+                let newMarker;
+                const params = feature.properties || {};
+
+                if (feature.type === 'Point') {
+                    const coords = ol.proj.fromLonLat([feature.coordinates.lon, feature.coordinates.lat]);
+                    params.coord = coords;
+
+                    if (params.iconUrl) {
+                        newMarker = this.createIconMarker(coords, params.iconUrl, params.name, params.description, params.scale);
+                    }
+                    else {
+                        newMarker = this.createTextMarker(params);
+                    }
+                }
+                else if (feature.type === 'LineString') {
+                    const coords = feature.coordinates.map(coord =>
+                        ol.proj.fromLonLat([coord.lon, coord.lat])
+                    );
+                    params.coord = coords[0];
+
+                    // Начало рисования линии
+                    newMarker = this.startDrawingLine(params);
+                    // Добавление оставшихся координат
+                    coords.slice(1).forEach(coord => this.continueDrawingLine(coord));
+                    this.stopDrawingLine();
+                }
+
+                if (newMarker) {
+                    newMarker.setId(feature.id); // Восстановление ID из файла
+                    paintMarkers.push(newMarker); // Добавление в текущий список маркеров
+                }
+            });
+        });
+    }
+
+    saveMarkersFile(paintMarkers, filename) {
+
+        // Создаем объект данных
+        const data = {
+            version: "1.0.0",
+            //map: {
+            //    center: {
+            //        lon: Math.round(center[0] * 10000000) / 10000000,
+            //        lat: Math.round(center[1] * 10000000) / 10000000
+            //    },
+            //    zoom: zoom
+            //},
+            features: [] // Маркеры и линии
+        };
+
+        // Проходим по всем объектам paintMarkers
+        paintMarkers.forEach(marker => {
+            const geometry = marker.getGeometry();
+            if (geometry.getType() === 'Point') { // Текстовый маркер
+                const coords = ol.proj.toLonLat(geometry.getCoordinates());
+                data.features.push({
+                    type: geometry.getType(),
+                    coordinates: {
+                        lon: Math.round(coords[0] * 10000000) / 10000000,
+                        lat: Math.round(coords[1] * 10000000) / 10000000
+                    },
+                    id: marker.getId(),
+                    properties: marker.get('property') //marker.getProperties()
+                });
+            }
+            else if (geometry.getType() === 'LineString') { // Линия
+                const coords = geometry.getCoordinates().map(coord => {
+                    const [lon, lat] = ol.proj.toLonLat(coord);
+                    return {
+                        lon: Math.round(lon * 10000000) / 10000000,
+                        lat: Math.round(lat * 10000000) / 10000000
+                    };
+                });
+                data.features.push({
+                    type: geometry.getType(),
+                    coordinates: coords,
+                    id: marker.getId(),
+                    properties: marker.get('property') //marker.getProperties()
+                });
+            }
+        });
+
+        // Сохранение в файл
+        const json = JSON.stringify(data, null, 2);
+        fs.writeFile(filename, json, err => {
+            if (err) {
+                return console.error(err);
+            }
+        });
+    }
+
+    setLineStyle(params) {
+        this.lineStyle = new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: params.color || 'blue',
+                width: params.width || 2,
+                lineDash: params.lineDash || null,
+            }),
+        });
+    }
+
+    setMarkerStyle(params) {
+        this.markerStyle = new ol.style.Style({
+            text: new ol.style.Text({
+                text: params.name,
+                font: `${params.fontSize}px Arial, sans-serif`,
+                fill: new ol.style.Fill({ color: params.color }),
+                stroke: new ol.style.Stroke({ color: 'white', width: 2 }),
+            }),
+        });
     }
 
     /**
@@ -17,26 +147,19 @@ class MarkerManager {
      * @param {string} color Цвет текста маркера
      * @param {number} fontSize Размер текста (в пикселях)
      */
-    createTextMarker(coordinate, name, description = '', color = 'black', fontSize = 14) {
+    createTextMarker(params) {
         const marker = new ol.Feature({
-            geometry: new ol.geom.Point(coordinate),
-            name: name,
-            description: description,
-            color: color,
-            fontSize: fontSize,
+            geometry: new ol.geom.Point(params.coord),
+            property: params,
+            //name: params.name,
+            //description: params.description,
+            //color: params.color,
+            //fontSize: params.fontSize,
         });
 
-        marker.setStyle(
-            new ol.style.Style({
-                text: new ol.style.Text({
-                    text: name,
-                    font: `${fontSize}px Arial, sans-serif`,
-                    fill: new ol.style.Fill({ color: color }),
-                    stroke: new ol.style.Stroke({ color: 'white', width: 2 }),
-                }),
-            })
-        );
-
+        this.setMarkerStyle(params);
+        marker.setStyle(this.markerStyle);
+        marker.setId(`marker-${Date.now()}`); // ID на основе времени
         // this.vectorSource.addFeature(marker);
         return marker;
     }
@@ -68,33 +191,26 @@ class MarkerManager {
             })
         );
 
+        marker.setId(`marker-${Date.now()}`); // ID на основе времени
         //this.vectorSource.addFeature(marker);
         return marker;
     }
 
-    setLineStyle(styleConfig) {
-        this.lineStyle = new ol.style.Style({
-            stroke: new ol.style.Stroke({
-                color: styleConfig.color || 'blue',
-                width: styleConfig.width || 2,
-                lineDash: styleConfig.lineDash || null,
-            }),
-        });
-    }
-    
     /**
      * Начать рисование линии
      * @param {Array<number>} startCoordinate - начальная координата линии
      * @returns {ol.Feature} - созданный объект линии
      */
-    startDrawingLine(startCoordinate, styleConfig) {
+    startDrawingLine(params) {
         this.isDrawing = true;
         this.currentLine = new ol.Feature({
-            geometry: new ol.geom.LineString([startCoordinate]),
+            geometry: new ol.geom.LineString([params.coord]),
+            property: params,
         });
 
-        this.setLineStyle(styleConfig);
+        this.setLineStyle(params);
         this.currentLine.setStyle(this.lineStyle);
+        this.currentLine.setId(`freeline-${Date.now()}`); // ID на основе времени
         return this.currentLine;
     }
 
@@ -163,21 +279,6 @@ class MarkerManager {
                 style.getText().setFont(`${marker.get('fontSize')}px Arial, sans-serif`);
             }
         }
-    }
-
-    /**
-     * Удалить маркер
-     * @param {ol.Feature} marker Маркер
-     */
-    removeMarker(marker) {
-        //this.vectorSource.removeFeature(marker);
-    }
-
-    /**
-     * Очистить все маркеры
-     */
-    clearAllMarkers() {
-        //this.vectorSource.clear();
     }
 }
 

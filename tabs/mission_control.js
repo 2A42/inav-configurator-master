@@ -21,7 +21,7 @@ const CONFIGURATOR = require('./../js/data_storage');
 const i18n = require('./../js/localization');
 const { globalSettings } = require('./../js/globalSettings');
 const MWNP = require('./../js/mwnp');
-const Waypoint = require('./../js/waypoint')
+const Waypoint = require('./../js/waypoint');
 const WaypointCollection = require('./../js/waypointCollection');
 const Safehome = require('./../js/safehome');
 const SafehomeCollection = require('./../js/safehomeCollection');
@@ -1400,6 +1400,7 @@ TABS.mission_control.initialize = function (callback) {
     function removeAllWaypoints() {
         if (isDrawingMode)
         {
+            paintMarkers = [];
             map.removeLayer(markerVectorLayer);
             markerVectorSource = new ol.source.Vector();
             markerVectorLayer = new ol.layer.Vector({
@@ -1644,18 +1645,12 @@ TABS.mission_control.initialize = function (callback) {
     }
 
     function refreshPaintMarkers() {
-        //for (var i in paintMarkers) {
-        //    map.removeLayer(paintMarkers[i]);
-        //}
-
-        // Создаем векторный источник и слой для хранения кругов
-
         paintMarkers.forEach(function (elem) {
-                // Добавляем круг в векторный источник
-                markerVectorSource.addFeature(elem);
+                if (!markerVectorSource.getFeatureById(elem.getId()))
+                    markerVectorSource.addFeature(elem);
             }
-        )
-        paintMarkers = [];
+        );
+        //paintMarkers = [];
     }
 
     function refreshLayers() {
@@ -2469,8 +2464,8 @@ TABS.mission_control.initialize = function (callback) {
         // Map on click event for drawing Mode
 
         map.on('pointermove', function (evt) {
-            if (!isDrawingMode || !isDrawingLineNow) return; // Только в режиме рисования
-            markerManager.continueDrawingLine(evt.coordinate); // Здесь добавляем evt
+            if (!isDrawingMode || !isDrawingLineNow) return;
+            markerManager.continueDrawingLine(evt.coordinate);
             //refreshPaintMarkers();
         });
 
@@ -2480,22 +2475,37 @@ TABS.mission_control.initialize = function (callback) {
             let Marker;
             const coord = evt.coordinate;
             evt.preventDefault(); // отключаем стандартное поведение карты
+
             if (evt.originalEvent.button === 2) { // Проверка на правую кнопку мыши (RMB)
                 isDrawingLineNow = true;
-                Marker = markerManager.startDrawingLine(evt.coordinate, {
+                Marker = markerManager.startDrawingLine({
+                    coord: coord,
                     color: 'black',
                     width: 2,
+                    description: 'Описание линии',
                     //lineDash: [5, 5], // Другая пунктирная линия
                 });
-            } else {
-                Marker = markerManager.createTextMarker(coord, '?', 'Описание маркера', 'blue', 16);
             }
+            else {
+                Marker = markerManager.createTextMarker({
+                        coord: coord,
+                        name: '?',
+                        description: 'Описание маркера',
+                        color: 'blue',
+                        fontSize: 16,
+                });
+            }
+            GUI.log(Marker.get('property')['color']);
+            GUI.log(Marker.get('property')['name']);
+            GUI.log(Marker.getId());
+            GUI.log(Marker.get('property')['description']);
+            GUI.log(Marker.get('property')['fontSize']);
             paintMarkers.push(Marker);
             refreshPaintMarkers();
         });
 
         map.on('pointerup', function (evt) {
-            if (!isDrawingMode) return; // Только в режиме рисования
+            if (!isDrawingMode || !isDrawingLineNow) return;
             isDrawingLineNow = false;
             markerManager.stopDrawingLine();
             refreshPaintMarkers();
@@ -3777,6 +3787,24 @@ TABS.mission_control.initialize = function (callback) {
         // Callback for Save/load buttons
         /////////////////////////////////////////////
         $('#loadFileMissionButton').on('click', function () {
+            if (isDrawingMode) {
+                var options = {
+                    filters: [{ name: "Drawing Markers file", extensions: ['json'] }]
+                };
+
+                dialog.showOpenDialog(options).then(result => {
+                    if (result.canceled) {
+                        GUI.log('No file selected');
+                        return;
+                    }
+                    if (result.filePaths.length == 1) {
+                        markerManager.loadMarkersFile(paintMarkers, result.filePaths[0]);
+                        GUI.log('Markers loaded');
+                    }
+                })
+                return;
+            }
+
             if (!fileLoadMultiMissionCheck()) return;
 
             if (markers.length && !confirm(i18n.getMessage('confirm_delete_all_points'))) return;
@@ -3796,13 +3824,14 @@ TABS.mission_control.initialize = function (callback) {
 
         $('#saveFileMissionButton').on('click', function () {
             var options = {
-                filters: [ { name: "Mission file", extensions: ['mission'] } ]
+                filters: [{ name: "Mission file", extensions: ['mission'] },
+                          { name: "Drawing Markers file", extensions: ['json'] }]
             };
             dialog.showSaveDialog(options).then(result =>  {
-                if (result.canceled) {
-                    return;
-                }
-                saveMissionFile(result.filePath);
+                if (result.canceled) return;
+
+                if (result.filePath.endsWith('.mission')) saveMissionFile(result.filePath);
+                else markerManager.saveMarkersFile(paintMarkers, result.filePath);
             });
         });
 

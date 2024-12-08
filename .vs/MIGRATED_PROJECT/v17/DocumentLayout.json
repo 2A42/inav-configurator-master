@@ -15,16 +15,16 @@
       "RelativeMoniker": "D:0:0:{B0FA5FF5-B0BD-49D2-A2C8-5B7096879BA9}|MIGRATED_PROJECT.esproj|solutionrelative:js\\helpers.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{B0FA5FF5-B0BD-49D2-A2C8-5B7096879BA9}|MIGRATED_PROJECT.esproj|c:\\programs\\projects\\inav-configurator-master\\js\\waypoint.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{B0FA5FF5-B0BD-49D2-A2C8-5B7096879BA9}|MIGRATED_PROJECT.esproj|solutionrelative:js\\waypoint.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{B0FA5FF5-B0BD-49D2-A2C8-5B7096879BA9}|MIGRATED_PROJECT.esproj|c:\\programs\\projects\\inav-configurator-master\\tabs\\mission_control.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{B0FA5FF5-B0BD-49D2-A2C8-5B7096879BA9}|MIGRATED_PROJECT.esproj|solutionrelative:tabs\\mission_control.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B0FA5FF5-B0BD-49D2-A2C8-5B7096879BA9}|MIGRATED_PROJECT.esproj|c:\\programs\\projects\\inav-configurator-master\\js\\waypointcollection.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
       "RelativeMoniker": "D:0:0:{B0FA5FF5-B0BD-49D2-A2C8-5B7096879BA9}|MIGRATED_PROJECT.esproj|solutionrelative:js\\waypointcollection.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B0FA5FF5-B0BD-49D2-A2C8-5B7096879BA9}|MIGRATED_PROJECT.esproj|c:\\programs\\projects\\inav-configurator-master\\js\\waypoint.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{B0FA5FF5-B0BD-49D2-A2C8-5B7096879BA9}|MIGRATED_PROJECT.esproj|solutionrelative:js\\waypoint.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,9 +42,9 @@
               "Title": "mission_control.js",
               "DocumentMoniker": "C:\\Programs\\Projects\\inav-configurator-master\\tabs\\mission_control.js",
               "RelativeDocumentMoniker": "tabs\\mission_control.js",
-              "ToolTip": "C:\\Programs\\Projects\\inav-configurator-master\\tabs\\mission_control.js*",
-              "RelativeToolTip": "tabs\\mission_control.js*",
-              "ViewState": "AQIAAKEJAAAAAAAAAAAiwKoJAAAkAAAA",
+              "ToolTip": "C:\\Programs\\Projects\\inav-configurator-master\\tabs\\mission_control.js",
+              "RelativeToolTip": "tabs\\mission_control.js",
+              "ViewState": "AQIAAMwOAAAAAAAAAAAAAOEOAABBAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
               "WhenOpened": "2024-11-25T16:24:13.964Z",
               "IsPinned": true,
@@ -70,7 +70,7 @@
               "RelativeDocumentMoniker": "js\\markerManager.js",
               "ToolTip": "C:\\Programs\\Projects\\inav-configurator-master\\js\\markerManager.js",
               "RelativeToolTip": "js\\markerManager.js",
-              "ViewState": "AQIAAGAAAAAAAAAAAAAAAGwAAAA5AAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAA6AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
               "WhenOpened": "2024-11-30T15:22:29.48Z",
               "EditorCaption": ""
@@ -89,7 +89,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "mission_control.html",
               "DocumentMoniker": "C:\\Programs\\Projects\\inav-configurator-master\\tabs\\mission_control.html",
               "RelativeDocumentMoniker": "tabs\\mission_control.html",
@@ -101,19 +101,19 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 3,
               "Title": "waypoint.js",
               "DocumentMoniker": "C:\\Programs\\Projects\\inav-configurator-master\\js\\waypoint.js",
               "RelativeDocumentMoniker": "js\\waypoint.js",
               "ToolTip": "C:\\Programs\\Projects\\inav-configurator-master\\js\\waypoint.js",
               "RelativeToolTip": "js\\waypoint.js",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAMAAAA",
+              "ViewState": "AQIAABwAAAAAAAAAAAAgwC4AAAASAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
               "WhenOpened": "2024-11-26T16:20:04.175Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "waypointCollection.js",
               "DocumentMoniker": "C:\\Programs\\Projects\\inav-configurator-master\\js\\waypointCollection.js",
               "RelativeDocumentMoniker": "js\\waypointCollection.js",
